@@ -1,0 +1,11 @@
+interface={{ lan_bridge_interface_name }}
+
+{% for br in lan_bridge_extra_nameservers -%}
+server={{ br }}
+{%- endfor %}
+
+dhcp-range={{ lan_bridge_dhcp_range_start }},{{ lan_bridge_dhcp_range_end }},12h
+
+{% for rsv in lan_bridge_dhcp_reservations -%}
+dhcp-host={{ rsv.mac }},{{ rsv.ip }}
+{%- endfor %}

@@ -1,0 +1,7 @@
+wan_interface_name: wan
+wan_interface_mac: 01:02:03:04:05:06
+wan_chap_username: chap_username
+wan_chap_password: chap_password
+wan_vlan_id: 835
+wan_vlan_interface_name: vlan{{ wan_vlan_id }}
+wan_ppp_interface_name: ppp0

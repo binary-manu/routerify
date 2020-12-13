@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+set -e
+set -o pipefail
+
+if [ "$IFACE" != "{{ wan_vlan_interface_name }}" ]; then
+  exit 0
+fi
+
+poff ftth-provider

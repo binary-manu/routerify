@@ -1,0 +1,21 @@
+routing_input_rules: [
+  # { protocol: tcp, port: 22 } 
+]
+
+routing_portfwd_rules: [
+  # { protocol: tcp, local_port: 2222, remote_ip: 192.168.1.1, remote_port: 22 } 
+]
+
+routing_other_rules: [
+  # { protocol: tcp, port: 22 } 
+]
+
+routing_spoof_ranges:
+  - 0.0.0.0/8
+  - 127.0.0.0/8
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 169.254.0.0/16
+  - 192.168.0.0/16
+  - 224.0.0.0/3
+  - 240.0.0.0/4

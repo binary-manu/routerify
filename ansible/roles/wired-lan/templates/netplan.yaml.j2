@@ -1,0 +1,9 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ wired_lan_interface_name }}:
+      match:
+        macaddress: {{ wired_lan_interface_mac }}
+      set-name: {{ wired_lan_interface_name }}
+      link-local: []

@@ -1,0 +1,46 @@
+- name: Install tooling for PPPoE over VLAN on FTTH
+  package:
+    state: present
+    name:
+      - pppoe
+      - networkd-dispatcher
+
+- name: Copy netplan configuration for the WAN
+  template:
+    src: netplan.yaml.j2
+    dest: "/etc/netplan/{{ global_netplan_wan_order }}-{{ wan_interface_name }}.yaml"
+
+- name: Copy vlan name policy settings
+  copy:
+    src: vlan.link
+    dest: /etc/systemd/network/{{ global_netplan_vlan_order }}-vlan-naming.link
+
+- name: Copy PPPoE configuration files and scripts
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "{{ item.mode }}"
+  loop:
+    - src: ftth-up.sh.j2
+      dest: /etc/networkd-dispatcher/carrier.d/ftth-up.sh
+      mode: "755"
+    - src: ftth-down.sh.j2
+      dest: /etc/networkd-dispatcher/no-carrier.d/ftth-down.sh
+      mode: "755"
+    - src: ftth-provider.j2
+      dest: /etc/ppp/peers/ftth-provider
+      mode: "0640"
+      group: dip
+
+- name: Link nocarrier.d and off.d scripts
+  file:
+    state: link
+    path: /etc/networkd-dispatcher/off.d/ftth-down.sh
+    src: /etc/networkd-dispatcher/no-carrier.d/ftth-down.sh
+
+- name: Write chap-secrets
+  lineinfile:
+    path: /etc/ppp/chap-secrets
+    line: '"{{ wan_chap_username }}" * "{{ wan_chap_password }}"'

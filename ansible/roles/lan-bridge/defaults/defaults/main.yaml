@@ -1,0 +1,9 @@
+lan_bridge_interface_name: brap
+lan_bridge_ip: 10.0.1.1/24
+lan_bridge_extra_nameservers:
+  - 8.8.8.8
+lan_bridge_dhcp_range_start: 10.0.1.100
+lan_bridge_dhcp_range_end:   10.0.1.199
+lan_bridge_dhcp_reservations: [
+  # { mac: AA:BB:CC:00:11:22, ip: 10.0.1.10 }
+]

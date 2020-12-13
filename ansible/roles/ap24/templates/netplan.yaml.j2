@@ -1,0 +1,9 @@
+ network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ ap24_interface_name }}:
+      match:
+        macaddress: {{ ap24_interface_mac }}
+      set-name: {{ ap24_interface_name }}
+      link-local: []

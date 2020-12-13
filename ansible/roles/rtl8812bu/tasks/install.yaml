@@ -1,0 +1,30 @@
+- name: Create directory for driver sources
+  file:
+    path: "{{ rtl8812bu_source_dir }}"
+    state: "{{ item }}"
+  loop:
+    - absent
+    - directory
+
+- name: Download driver sources
+  unarchive:
+    remote_src: yes
+    src: "{{ rtl8812bu_archive_url }}"
+    dest: "{{ rtl8812bu_source_dir }}"
+
+- name: Patch driver version
+  lineinfile:
+    path: "{{ rtl8812bu_source_project_dir }}/dkms.conf"
+    regex: '^PACKAGE_VERSION="@PKGVER@"$'
+    line: 'PACKAGE_VERSION="{{ rtl88x2bu_dkms_version }}"'
+
+- name: Add modprobe option to enable 80MHz channel in 802.11ac
+  copy:
+    src: 88x2bu.conf
+    dest: /etc/modprobe.d/88x2bu.conf
+
+- name: Add driver to DKMS
+  shell: |
+    cd '{{ rtl8812bu_source_project_dir }}'
+    dkms remove {{ rtl88x2bu_dkms_name }}/{{ rtl88x2bu_dkms_version }} || true
+    dkms install .

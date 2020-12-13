@@ -1,0 +1,69 @@
+# Driver and control interface
+ctrl_interface_group=0
+ctrl_interface=/run/hostapd
+driver=nl80211
+interface={{ ap24_interface_name }}
+{% if args_in.bridge | default(False) %}
+bridge={{ args_in.bridge }}
+{% endif %}
+logger_stdout=-1
+logger_stdout_level=5
+logger_syslog=-1
+logger_syslog_level=5
+
+# Main WiFi settings
+channel={{ ap24_channel }}
+country_code={{ ap24_country }}
+ssid={{ ap24_ssid }}
+utf8_ssid=1
+hw_mode=g
+ieee80211d=1
+ieee80211h=1
+## HT
+{% if ap24_ht_enable %}
+ieee80211n=1
+require_ht=0
+ht_capab={{ ap24_ht_capabilities }}
+{% else %}
+ieee80211n=0
+{% endif %}
+
+
+# Additional WiFi settings
+beacon_int=100
+ignore_broadcast_ssid=0
+macaddr_acl=0
+max_num_sta=255
+own_ip_addr=127.0.0.1
+
+# WMM
+wmm_ac_be_acm=0
+wmm_ac_be_aifs=3
+wmm_ac_be_cwmax=10
+wmm_ac_be_cwmin=4
+wmm_ac_be_txop_limit=0
+wmm_ac_bk_acm=0
+wmm_ac_bk_aifs=7
+wmm_ac_bk_cwmax=10
+wmm_ac_bk_cwmin=4
+wmm_ac_bk_txop_limit=0
+wmm_ac_vi_acm=0
+wmm_ac_vi_aifs=2
+wmm_ac_vi_cwmax=4
+wmm_ac_vi_cwmin=3
+wmm_ac_vi_txop_limit=94
+wmm_ac_vo_acm=0
+wmm_ac_vo_aifs=2
+wmm_ac_vo_cwmax=3
+wmm_ac_vo_cwmin=2
+wmm_ac_vo_txop_limit=47
+wmm_enabled=1
+
+# Security
+auth_algs=3
+eapol_key_index_workaround=0
+eap_server=0
+wpa=2
+wpa_key_mgmt=WPA-PSK
+wpa_pairwise=TKIP CCMP
+wpa_passphrase={{ ap24_password }}

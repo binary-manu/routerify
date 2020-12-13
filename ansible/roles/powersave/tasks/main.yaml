@@ -1,0 +1,30 @@
+- name: Forbid system sleep, hibernate, etc...
+  ini_file:
+    path: /etc/systemd/sleep.conf
+    create: no
+    no_extra_spaces: yes
+    section: Sleep
+    option: "{{ item.option }}"
+    state: present
+    value: "{{ item.value }}"
+  loop:
+    - option: AllowSuspend
+      value: "no"
+    - option: AllowHibernation
+      value: "no"
+    - option: AllowSuspendThenHibernate
+      value: "no"
+    - option: AllowHybridSleep
+      value: "no"
+
+- name: Install service to poweroff the TTY
+  template:
+    src: console-power.service.j2
+    dest: /etc/systemd/system/console-power.service
+    owner: root
+    group: root
+    mode: "644"
+  notify: Enable console-power
+  register: self_result
+  changed_when: self_result.changed or run_handlers
+

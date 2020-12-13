@@ -1,0 +1,4 @@
+- name: Install hostapd
+  package:
+    state: present
+    name: hostapd

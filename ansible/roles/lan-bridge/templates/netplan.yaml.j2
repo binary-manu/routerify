@@ -1,0 +1,16 @@
+network:
+  version: 2
+  renderer: networkd
+  bridges:
+    {{ lan_bridge_interface_name }}:
+      link-local: []
+      addresses:
+        - {{ lan_bridge_ip }}
+      {%- if args_in.slaves %}
+
+      interfaces:
+        {%- for iface in args_in.slaves %}
+
+        - {{ iface }}
+        {% endfor %}
+      {% endif %}

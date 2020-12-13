@@ -1,0 +1,4 @@
+- name: Enable dnsmasq
+  service:
+    name: dnsmasq
+    enabled: yes

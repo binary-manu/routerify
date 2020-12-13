@@ -1,0 +1,6 @@
+# Base SSID used for both 2.4GHz and 5GHz if not overridden
+ap_common_ssid: MYSSID
+# Global country code
+ap_common_country: IT
+# Default password shared between bands
+ap_common_wifi_password: abcd$1234

@@ -1,0 +1,9 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ ap5_interface_name }}:
+      match:
+        macaddress: {{ ap5_interface_mac }}
+      set-name: {{ ap5_interface_name }}
+      link-local: []

@@ -1,0 +1,14 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ wan_interface_name }}:
+      match:
+        macaddress: {{ wan_interface_mac }}
+      set-name: {{ wan_interface_name }}
+      link-local: []
+  vlans:
+    {{ wan_vlan_interface_name }}:
+      link: {{ wan_interface_name }}
+      id: {{ wan_vlan_id }}
+      link-local: []

@@ -1,0 +1,20 @@
+### Execution control ###
+# Always force handlers to run
+run_handlers: no
+# Don't stop on errors
+keep_going: no
+
+### Global variables ###
+# Control netplan file ordering relative to each other.
+# Don't change them unless something is not working.
+global_netplan_vlan_order: "05"
+global_netplan_slave_order: 10
+global_netplan_wan_order: 10
+global_netplan_bridge_order: 20
+
+### Feature enable/disable ###
+enable_rtl8812u: yes
+enable_ap5: yes
+enable_ap24: yes
+enable_wired_lan: yes
+enable_powersave: yes

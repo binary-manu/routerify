@@ -1,0 +1,5 @@
+rtl8812bu_archive_url: https://github.com/RinCat/RTL88x2BU-Linux-Driver/archive/master.zip
+rtl8812bu_source_dir: /tmp/rtl8812bu
+rtl8812bu_source_project_dir: "{{ rtl8812bu_source_dir }}/RTL88x2BU-Linux-Driver-master"
+rtl88x2bu_dkms_name: rtl88x2bu
+rtl88x2bu_dkms_version: git

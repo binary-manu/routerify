@@ -1,0 +1,9 @@
+[Unit]
+Description=Shut down the TTY after a set amount of time
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "setterm --term linux --powersave powerdown --powerdown {{ powersave_tty_poweroff_minutes }} --blank {{ powersave_tty_poweroff_minutes }} > /dev/tty1 < /dev/tty1"
+
+[Install]
+WantedBy=multi-user.target

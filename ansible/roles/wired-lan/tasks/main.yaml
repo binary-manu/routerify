@@ -1,0 +1,7 @@
+- name: Copy netplan configuration files for the wired LAN
+  template:
+    src: netplan.yaml.j2
+    dest: "/etc/netplan/{{ global_netplan_slave_order }}-{{ wired_lan_interface_name }}.yaml"
+    mode: "644"
+    owner: root
+    group: root

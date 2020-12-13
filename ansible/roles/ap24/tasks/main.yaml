@@ -1,0 +1,18 @@
+- name: Copy configuration for 2.4GHz AP
+  notify: Enable hostapd@{{ ap24_interface_name }}
+  register: self_result
+  changed_when: self_result.changed or run_handlers
+  template:
+    src: hostapd.conf.j2
+    dest: "/etc/hostapd/{{ ap24_interface_name }}.conf"
+    mode: "600"
+    owner: root
+    group: root
+
+- name: Copy netplan configuration files for 2.4GHz AP
+  template:
+    src: netplan.yaml.j2
+    dest: "/etc/netplan/{{ global_netplan_slave_order }}-{{ ap24_interface_name }}.yaml"
+    mode: "644"
+    owner: root
+    group: root

@@ -1,0 +1,45 @@
+- name: Prepare the router
+  hosts: all
+  ignore_errors: "{{ keep_going }}"
+  become: yes
+  pre_tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
+  roles:
+    - role: lan-bridge/defaults
+    - role: rtl8812bu
+      when: enable_rtl8812u
+    - role: ap5
+      vars:
+        args_in:
+          bridge: "{{ lan_bridge_interface_name }}"
+      when: enable_ap5
+    - role: ap24
+      vars:
+        args_in:
+          bridge: "{{ lan_bridge_interface_name }}"
+      when: enable_ap24
+    - role: wired-lan
+      when: enable_wired_lan
+    - role: lan-bridge
+      vars:
+        args_in:
+          # AP interfaces are added to the bridge by hostapd itself.
+          # No need to do that here.
+          slaves: >
+            {%- set l = [] -%}
+            {%- if enable_wired_lan -%}
+              {%- set l = l + [wired_lan_interface_name] -%}
+            {%- endif -%}
+            {{- l -}}
+    - role: wan
+    - role: routing
+      vars:
+        args_in:
+          lan_nic: "{{ lan_bridge_interface_name }}"
+          wan_nic: "{{ wan_ppp_interface_name }}"
+    - role: powersave
+      when: enable_powersave
+
+# vi: set sts=-1 et sw=2 :

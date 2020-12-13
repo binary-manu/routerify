@@ -1,0 +1,28 @@
+create TCPLOCALPORTS bitmap:port range 0-65535
+create UDPLOCALPORTS bitmap:port range 0-65535
+create TCPOTHERPORTS bitmap:port range 0-65535
+create UDPOTHERPORTS bitmap:port range 0-65535
+
+{% for rule in routing_input_rules %}
+    {%- if rule.protocol == "tcp" -%}
+        add TCPLOCALPORTS {{ rule.port }}
+    {%- else -%}
+        add UDPLOCALPORTS {{ rule.port }}
+    {%- endif %}
+
+{% endfor %}
+
+{% for rule in routing_other_rules %}
+    {%- if rule.protocol == "tcp" -%}
+        add TCPOTHERPORTS {{ rule.port }}
+    {%- else -%}
+        add UDPOTHERPORTS {{ rule.port }}
+    {%- endif %}
+
+{% endfor %}
+
+create SPOOFRANGES hash:net
+
+{% for spoof in routing_spoof_ranges -%}
+    add SPOOFRANGES {{ spoof }}
+{% endfor %}

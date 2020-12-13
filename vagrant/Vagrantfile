@@ -1,0 +1,82 @@
+load "./ap_spec.rb"
+
+WAN_MAC  = "08:00:27:00:00:02"
+WAN_IP   = "10.0.2.1/24"
+LAN_MAC  = "08:00:27:00:00:01"
+LAN_IP   = "10.0.1.1/24"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/debian10"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 2
+    vb.memory=1024
+    vb.default_nic_type = "virtio"
+
+    # Make WAN & LAN NIC MAC's predictable
+    vb.customize ["modifyvm", :id, "--macaddress2", WAN_MAC.gsub(/:/, "")]
+    vb.customize ["modifyvm", :id, "--macaddress3", LAN_MAC.gsub(/:/, "")]
+
+    # Passthrough USB devices that will act as AP24/AP5
+    vb.customize ["modifyvm", :id, "--usbehci", "on", "--usbohci", "on"]
+
+    if AP24_VID != ""
+      vb.customize [
+        "usbfilter", "add", "0", "--target", :id, "--name", "AP24",
+        "--vendorid", AP24_VID, "--productid", AP24_PID, "--remote", "no"
+      ]
+    end
+    if AP5_VID != ""
+      vb.customize [
+        "usbfilter", "add", "1", "--target", :id, "--name", "AP5",
+        "--vendorid", AP5_VID, "--productid", AP5_PID, "--remote", "no"
+      ]
+    end
+  end
+
+  # Needed to copy the FW
+  config.vm.synced_folder ".", "/vagrant", type: "rsync"
+
+  # Networks for WAN & LAN
+  config.vm.network "private_network", ip: WAN_IP, auto_config: false
+  config.vm.network "private_network", ip: LAN_IP, auto_config: false
+
+  if AP24_VID != "" and AP24_PROVISIONER != ""
+    config.vm.provision "ansible" do |ans|
+      ans.playbook = AP24_PROVISIONER
+    end
+  end
+  if AP5_VID != "" and AP5_PROVISIONER != ""
+    config.vm.provision "ansible" do |ans|
+      ans.playbook = AP5_PROVISIONER
+    end
+  end
+
+  extra_vars = {
+    ap24_interface_mac:      AP24_MAC,
+    ap5_interface_mac:       AP5_MAC,
+    wired_lan_interface_mac: LAN_MAC,
+    wan_interface_mac:       WAN_MAC,
+    run_handlers:            true,
+    keep_going:              true,
+    routing_other_rules:     [
+      {
+        protocol: "tcp",
+        port: 22
+      }
+    ]
+  }
+  if AP24_VID == ""
+    extra_vars.merge({ enable_ap24: no })
+  end
+  if AP5_VID == ""
+    extra_vars.merge({ enable_ap5: no })
+  end
+
+  config.vm.provision "ansible" do |ans|
+    ans.playbook = "../ansible/routerify.yaml"
+    ans.verbose = true
+    ans.extra_vars = extra_vars
+  end
+
+end

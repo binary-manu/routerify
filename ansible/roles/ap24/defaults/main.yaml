@@ -1,0 +1,8 @@
+ap24_interface_name: ap24
+ap24_interface_mac: DD:EE:FF:77:88:99
+ap24_channel: 6
+ap24_country: "{{ ap_common_country }}"
+ap24_ssid: "{{ ap_common_ssid }}-24"
+ap24_password: "{{ ap_common_wifi_password }}"
+ap24_ht_enable: yes
+ap24_ht_capabilities: "[SHORT-GI-20]"

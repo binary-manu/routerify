@@ -1,0 +1,2 @@
+- name: Update GRUB configuration
+  command: update-grub

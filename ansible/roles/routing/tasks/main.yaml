@@ -1,0 +1,68 @@
+- name: Install iptables persistence tooling
+  package:
+    state: present
+    name:
+      - iptables-persistent
+      - ipset
+      - ipset-persistent
+
+- name: Copy iptables rules
+  template:
+    src: rules.v4.j2
+    dest: /etc/iptables/rules.v4
+    owner: root
+    group: root
+    mode: "644"
+
+- name: Copy ipsets
+  template:
+    src: ipsets.j2
+    dest: /etc/iptables/ipsets
+    owner: root
+    group: root
+    mode: "640"
+
+- name: Copy forwarding sysctls
+  copy:
+    src: forward.conf
+    dest: /etc/sysctl.d/forward.conf
+    owner: root
+    group: root
+    mode: "644"
+
+- name: Check if IPv6 is already disabled
+  shell: |
+    # Is there a command line variable?
+    cmdline=$(grep '^\s*GRUB_CMDLINE_LINUX=' /etc/default/grub)
+    err=$?
+    if [ $err -eq 0 ]; then
+      # Does it already disable IPv6?
+      echo "$cmdline" | grep '\bipv6\.disable=1\b' > /dev/null
+      err=$?
+      if [ $err -eq 1 ]; then
+        printf replace
+      elif [ $err -eq 0 ]; then
+        printf ""
+      else
+        exit 1
+      fi
+    elif [ $err -eq 1 ]; then
+      echo 'GRUB_CMDLINE_LINUX=""' >> /etc/default/grub || exit 1
+      printf changed
+    else
+      exit 1
+    fi
+  register: _ipv6_disabled
+  changed_when: _ipv6_disabled.stdout == "changed"
+
+- name: Disable IPv6 via kernel options
+  when: _ipv6_disabled.stdout != ""
+  lineinfile:
+    state: present
+    backrefs: yes
+    path: /etc/default/grub
+    regex: '^(\s*GRUB_CMDLINE_LINUX=")([^"]*)("\s*)$'
+    line: '\1\2 ipv6.disable=1\3'
+  register: self_result
+  changed_when: self_result.changed or run_handlers
+  notify: Update GRUB configuration

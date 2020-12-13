@@ -1,0 +1,4 @@
+[Match]
+Driver=802.1Q*
+[Link]
+NamePolicy=kernel
