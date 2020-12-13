@@ -12,6 +12,10 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.1.0] - 2020-12-13
+
+### Added
+
 * Initial release of the playbook.
 
 <!-- vi: set tw=72 et sw=2 fo=tcroqan autoindent: -->
