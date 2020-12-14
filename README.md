@@ -413,7 +413,7 @@ chains/sets, depending on the location of the target service:
   # For a TCP service
   ipset add TCPLOCALPORTS 5000
   # For a UDP service
-  ipset add TCPLOCALPORTS 5000
+  ipset add UDPLOCALPORTS 5000
 
   # Make the change persistent
   ipset save > /etc/iptables/ipsets
