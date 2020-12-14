@@ -40,7 +40,7 @@ At the moment, some of the limitations of the playbook are:
   Debian versions or derivatives, but this has not been tested;
 * no UI for configuration: tweaks must be applied via the command line
   (i.e. forwarding ports);
-* it doesn't handle more than one wired NIC, altough multiple wired
+* it doesn't handle more than one wired NIC, although multiple wired
   clients can be connected simply by attaching an L2 switch to the NIC
   configured for wired connectivity;
 * tweaking AP settings require editing `hostapd` configuration files
@@ -126,7 +126,7 @@ The following variables control global execution:
 
 * `run_handlers` will force any Ansible handler to run again. This is
   mainly useful in case an error occurs and the playbook must be
-  reexecuted. It ensures that handlers are not skipped because their
+  re-executed. It ensures that handlers are not skipped because their
   triggering tasks has already been executed;
 * `keep_going`: don't stop on errors. Mainly useful for debugging.
 
@@ -141,7 +141,7 @@ A set of variable enable or disable optional features:
   configured;
 * `enable_wired_lan`: if set to `true`, support for wired LAN
   connectivity is configured;
-* `enable_powersave`: if set to `true`, power-saving configureations
+* `enable_powersave`: if set to `true`, power-saving configurations
   will be performed.
 
 By default, _all_ of the feature variables above are enabled.
@@ -180,7 +180,7 @@ folder.
 Enabled or disabled via `enable_ap24`. Performed by role `ap24`.
 
 If enabled, it will configure an instance of `hostapd` to start at boot
-and to use a WiFi card suppoting AP mode as a 2.4GHz AP.
+and to use a WiFi card supporting AP mode as a 2.4GHz AP.
 
 The following variables can be used to configure the AP:
 
@@ -189,7 +189,7 @@ The following variables can be used to configure the AP:
 * `ap24_interface_mac`: the AP interface is selected by its MAC address
   in colon format (i.e. `00:11:22:33:44:55`);
 * `ap24_channel`: WiFi channel for the AP, defaults is `6`;
-* `ap24_country`: country code used to set the wireless regulatroy domain
+* `ap24_country`: country code used to set the wireless regulatory domain
   for the AP. If not explicitly overridden, it will use the value of
   `ap_common_country`;
 * `ap24_ssid`: SSID of the 2.4GHz network. If not overridden, it will
@@ -213,7 +213,7 @@ need to change low-level device settings.
 Enabled or disabled via `enable_ap5`. Performed by role `ap5`.
 
 If enabled, it will configure an instance of `hostapd` to start at boot
-and to use a WiFi card suppoting AP mode as a 5GHz AP.
+and to use a WiFi card supporting AP mode as a 5GHz AP.
 
 The following variables can be used to configure the AP:
 
@@ -222,7 +222,7 @@ The following variables can be used to configure the AP:
 * `ap5_interface_mac`: the AP interface is selected by its MAC address
   in colon format (i.e. `00:11:22:33:44:55`);
 * `ap5_channel`: WiFi channel for the AP, defaults is `36`;
-* `ap5_country`: country code used to set the wireless regulatroy domain
+* `ap5_country`: country code used to set the wireless regulatory domain
   for the AP. If not explicitly overridden, it will use the value of
   `ap_common_country`;
 * `ap5_country3`: extra country code byte that controls indoor/outdoor
@@ -298,7 +298,7 @@ The following variables can be used:
 * `lan_bridge_ip`: IPv4 assigned to the bridge interface, used to
   address the router itself. Must be given in CIDR notation (i.e.
   `10.0.1.1/24`);
-* `lan_bridge_extra_nameservers`: a list of additional nameservers that
+* `lan_bridge_extra_nameservers`: a list of additional name servers that
   `dnsmasq` will use to resolve domain names;
 * `lan_bridge_dhcp_range_start`: the first address of the DHCP
   pool, inclusive (i.e. `10.0.1.100`);
@@ -345,7 +345,7 @@ Performed by role `wan`. This role acts as a dependency and
 cannot be enabled or disabled on its own.
 
 It performs all the required configuration steps to allow a PPP
-connection to be stablished between the system and an upstream PPPoE
+connection to be established between the system and an upstream PPPoE
 server, via which Internet access is obtained. It involves settings up
 PPPoE, VLAN tagging and identifying the physical NIC connected to the
 ONT.
@@ -353,9 +353,9 @@ ONT.
 Currently this is the only supported scheme for connecting to the
 Internet. PPPoE must be authenticated with CHAP.
 
-PPPoE connections react to carrier changes reating to the physical NIC.
-When the carries goes away, the connection is terminated. When the
-carrier is detected, it is brought up.
+PPPoE connections react to carrier changes of the physical NIC.  When
+the carrier goes away, the connection is terminated. When the carrier is
+detected, it is brought up.
 
 The following variables can be used:
 
@@ -373,7 +373,7 @@ The following variables can be used:
 
 ## Routing
 
-After configuration, the system will route packets as most residental
+After configuration, the system will route packets as most residential
 routers would do:
 
 * outgoing traffic is allowed from both the router itself and from any
@@ -386,7 +386,7 @@ routers would do:
 Before provisioning, the following variables can be used to define port
 forwarding to specific services:
 * `routing_input_rules` defines ports on the router itself that will be
-  accessibile from the Internet (i.e. to allow SSH connectivity from
+  accessible from the Internet (i.e. to allow SSH connectivity from
   outside the network);
 * `routing_portfwd_rules` defines port forwarding rules for services
   that are offered by hosts behind the gateway itself. You should state
