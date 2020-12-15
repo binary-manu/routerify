@@ -1,17 +1,8 @@
 *filter
-:INPUT DROP [3055:289669]
-:FORWARD DROP [3:156]
-:OUTPUT ACCEPT [29343:3446972]
 
-:COMMONATTACKS - [0:0]
--A COMMONATTACKS -m set --match-set SPOOFRANGES src -j DROP
--A COMMONATTACKS -p tcp ! --syn -m state --state NEW -j DROP
--A COMMONATTACKS -f -j DROP
--A COMMONATTACKS -p tcp --tcp-flags ALL ALL -j DROP
--A COMMONATTACKS -p tcp --tcp-flags ALL NONE -j DROP
-
-:PUBLIC_IP_ONLY - [0:0]
--A PUBLIC_IP_ONLY -m addrtype --limit-iface-in ! --dst-type LOCAL -j DROP
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
 
 :LOCAL_SERVICES - [0:0]
 -A LOCAL_SERVICES -i {{ args_in.wan_nic }} -p tcp -m set --match-set TCPLOCALPORTS dst -j ACCEPT
@@ -22,18 +13,20 @@
 -A INPUT -i {{ args_in.wan_nic }} -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i {{ args_in.lan_nic }} -j ACCEPT
 -A INPUT -i lo -j ACCEPT
--A INPUT -i {{ args_in.wan_nic }} -j COMMONATTACKS
--A INPUT -i {{ args_in.wan_nic }} -j PUBLIC_IP_ONLY
 -A INPUT -j LOCAL_SERVICES
+
 -A FORWARD -i {{ args_in.wan_nic }} -m conntrack --ctstate RELATED,ESTABLISHED,DNAT -j ACCEPT
 -A FORWARD -i {{ args_in.lan_nic }} -j ACCEPT
 
 COMMIT
+
 *nat
-:PREROUTING ACCEPT [34046:3156973]
-:INPUT ACCEPT [10845:820115]
-:POSTROUTING ACCEPT [39:10902]
-:OUTPUT ACCEPT [10395:797997]
+
+:PREROUTING ACCEPT [0:0]
+:INPUT ACCEPT [0:0]
+:POSTROUTING ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+
 :PORTFWD - [0:0]
 {% for rule in routing_portfwd_rules %}
 -A PORTFWD -p {{ rule.protocol }} --dport {{ rule.local_port }} -j DNAT --to-destination {{ rule.remote_ip }}:{{ rule.remote_port }}
@@ -41,4 +34,32 @@ COMMIT
 
 -A PREROUTING -i {{ args_in.wan_nic }} -j PORTFWD
 -A POSTROUTING -o {{ args_in.wan_nic }} -j MASQUERADE
+
+COMMIT
+
+*mangle
+
+:COMMONATTACKS_STATEFUL - [0:0]
+-A COMMONATTACKS_STATEFUL -p tcp ! --syn -m state --state NEW -j DROP
+
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -i {{ args_in.wan_nic }} -j COMMONATTACKS_STATEFUL
+
+COMMIT
+
+*raw
+
+:PUBLIC_IP_ONLY - [0:0]
+-A PUBLIC_IP_ONLY -m addrtype --limit-iface-in ! --dst-type LOCAL -j DROP
+
+:COMMONATTACKS_STATELESS - [0:0]
+-A COMMONATTACKS_STATELESS -f -j DROP
+-A COMMONATTACKS_STATELESS -m set --match-set SPOOFRANGES src -j DROP
+-A COMMONATTACKS_STATELESS -p tcp --tcp-flags ALL ALL -j DROP
+-A COMMONATTACKS_STATELESS -p tcp --tcp-flags ALL NONE -j DROP
+
+:PREROUTING ACCEPT [0:0]
+-A PREROUTING -i {{ args_in.wan_nic }} -j PUBLIC_IP_ONLY
+-A PREROUTING -i {{ args_in.wan_nic }} -j COMMONATTACKS_STATELESS
+
 COMMIT
