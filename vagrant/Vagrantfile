@@ -34,7 +34,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # Needed to copy the FW
   config.vm.synced_folder ".", "/vagrant", type: "rsync"
 
   # Networks for WAN & LAN
