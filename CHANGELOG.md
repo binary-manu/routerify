@@ -12,6 +12,17 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+### Fixed
+
+* `iptables` rules have been reworked to better handle common
+  patterns and avoid duplication. Most checks, which were only
+  applied to input traffic, are now applied to forwarded traffic
+  as well.
+* The documentation has been reviewed for typos and stylistic issues.
+  Contributed by [dgabriel123](https://github.com/dgabriel123).
+* Ansible variable `enable_rtl8812u` has been renamed to `enable_rtl8812bu`,
+  to reflect the full, correct chip name.
+
 ## [0.1.0] - 2020-12-13
 
 ### Added
