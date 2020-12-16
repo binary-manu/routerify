@@ -8,11 +8,11 @@ router.
 For LAN connectivity, it can behave as a 2.4Ghz AP, 5GHz AP, and wired
 switch at the same time, each element being optional. Each
 wired/wireless LAN client can communicate with other clients. IPAM is
-handled via `dnsmasq`, providing DCHP and DNS to all clients. The LAN IP
+handled via `dnsmasq`, providing DHCP and DNS to all clients. The LAN IP
 range and initial reservations are customizable.
 
 WAN connectivity is expected to be provided via an authenticated PPPoE
-link. `iptables` rules that control forwarding between the LAN and the
+link. `iptables` rules control forwarding between the LAN and the
 Internet, applying IP masquerading to outgoing traffic. All incoming
 traffic is blocked by default, with the exception of responses to
 LAN-initiated traffic.
@@ -50,29 +50,28 @@ At the moment, some of the limitations of the playbook are:
 
 ## Structure
 
-`anssible/routerify.yaml`file contains the plays, which simply call on roles from
-`ansible/roles/`. Almost all configuration is done via Ansible variable. Most of them are
-kept within the `defaults` of the role to which they pertain logically.
-A few variables that did not fit nicely in any roles were placed in
-`ansible/group_vars/all/00-defaults.yaml`. Thus, the simplest way to
-configure your setup is to add an extra file under
-`ansible/group_vars/all` that comes _lexicographically after_ the
+`ansible/routerify.yaml` contains the plays, which simply call on roles
+from `ansible/roles/`. Almost all configuration is done via Ansible
+variables. Most of them are kept within the `defaults` of the role to
+which they pertain logically.  A few variables that did not fit nicely
+in any roles were placed in `ansible/group_vars/all/00-defaults.yaml`.
+Thus, the simplest way to configure your setup is to add an extra file
+under `ansible/group_vars/all` that comes _lexicographically after_ the
 defaults, and use it to override both globals and role defaults.
 
 Currently, some configuration facets require editing role templates. An
-example of this is the`hostapd` configuration files. Changing the SSID or
-the AP channel can be done via variables, but lower-level settings can
-only be changed by editing the files.
+example of this is the `hostapd` configuration. Changing the SSID
+or the AP channel can be done via variables, but lower-level settings
+can only be changed by editing the files.
 
 ## How to use
 
-* Install a base Debian 10 system. There are no particular
-  constraints, so you can partition the disks as you like, and install
-  any additional tools that you want. If you plan to run the playbook on the
-  system itself, Ansible must be installed. If a remote
-  controller is used, `ssh` access must be granted. Also, `sudo` must be
-  installed, as it's the default privilege escalation method used by
-  Ansible;
+* Install a base Debian 10 system. There are no particular constraints,
+  so you can partition the disks as you like, and install any additional
+  tools that you want. If you plan to run the playbook on the system
+  itself, Ansible must be installed. If a remote controller is used,
+  `ssh` access must be granted. Also, `sudo` must be installed, as it's
+  the default privilege escalation method used by Ansible;
 * Configure the playbook according to your setup, via Ansible variables
   and template files when needed;
 * Run the playbook;
@@ -89,7 +88,7 @@ ap_common_ssid: MY_SSID
 ap_common_country: IT
 
 # WPA password used for both 2.4GHz and 5GHz networks
-ap_common_wifi_password: I_@am_s3cuR3
+ap_common_wifi_password: I_@m_s3cuR3
 
 # Replace all MAC's with the real addresses of the
 # devices you want to use
@@ -106,7 +105,7 @@ ap5_channel: 36
 lan_bridge_ip: 10.0.1.1/24
 lan_bridge_dhcp_range_start: 10.0.1.100
 lan_bridge_dhcp_range_end:   10.0.1.199
-# Add Google DNS server to the resolver confiuration
+# Add Google DNS server to the resolver configuration
 lan_bridge_extra_nameservers:
   - 8.8.8.8
 
@@ -127,7 +126,7 @@ The following variables control global execution:
   triggering tasks have already been executed;
 * `keep_going`: does not stop on errors. Useful for debugging.
 
-A set of variable enable or disable optional features:
+A set of variables enable or disable optional features:
 
 * `enable_rtl8812u`: if set to `true`, the playbook will install the
   out-of-tree driver for the Realtek RTL8812BU wireless chipset via
@@ -145,27 +144,27 @@ By default, _all_ of the feature variables above are enabled.
 
 ## Feature-specific configuration
 
-### Realtek RTK8812BU driver support
+### Realtek RTL8812BU driver support
 
 Enabled or disabled via `enable_rtl8812u`. Performed by role
 `rtl8812bu`.
 
 Generally speaking, the playbook is agnostic to the devices used to
 create wireless AP's or wired LANs; it simply expects the kernel to
-support them. If this is not the case, drivers/firmware must be installed
-before running the playbook.
+support them. If this is not the case, drivers/firmware must be
+installed before running the playbook.
 
-However, *routerify* was written to automate a specific deployment
+However, `routerify` was written to automate a specific deployment
 scenario, which involves a well-defined network adapter employing the
 Realtek RTL8812BU chipset. Its Linux driver is not in-tree, so it must
 be downloaded, added do DKMS, and compiled for each available kernel.
 
 As a convenience, a role to deploy this specific driver was included, so
 if you happen to have an adapter employing the same chip this will save
-you the effort of installing it manually. It also includes some nice module
-option tweaks (e.g., enabling 80MHz channels in 802.11ac mode).
+you the effort of installing it manually. It also includes some nice
+module option tweaks (e.g., enabling 80MHz channels in 802.11ac mode).
 
-Disable this feature If you are using any other WiFi chip.
+Disable this feature if you are using any other WiFi chip.
 
 Fine-tuning of this feature can be obtained via the variables define in
 `roles/rtl8812bu/defaults/main.yaml`. In particular, they define the URL
@@ -181,14 +180,14 @@ and to use a WiFi card supporting AP mode as a 2.4GHz AP.
 
 The following variables can be used to configure the AP:
 
-* `ap24_interface_name`: defines how the interface used for the 2.4GHz AP will be
-  renamed;
+* `ap24_interface_name`: defines how the interface used for the 2.4GHz
+  AP will be renamed;
 * `ap24_interface_mac`: the AP interface is selected by its MAC address
   in colon format (e.g., `00:11:22:33:44:55`);
 * `ap24_channel`: WiFi channel for the AP; default value is `6`;
-* `ap24_country`: country code used to set the wireless regulatory domain
-  for the AP. If not explicitly overridden, it will use the value of
-  `ap_common_country`;
+* `ap24_country`: country code used to set the wireless regulatory
+  domain for the AP. If not explicitly overridden, it will use the value
+  of `ap_common_country`;
 * `ap24_ssid`: SSID of the 2.4GHz network. If not overridden, it will
   use the value of `ap_common_ssid`, with `-24` appended;
 * `ap24_password`: ASCII WPA/WPA2 passphrase used for authentication. If
@@ -198,7 +197,7 @@ For each new setup, the only variable which requires tweaking is
 `ap24_interface_mac`, as every adapter will have its own MAC. Changing
 the channel may or may not be useful in your environment.
 
-Country code, SSID, and WPA password can be either set top unique values
+Country code, SSID, and WPA password can be either set to unique values
 or shared with the 5GHz AP. In that case, you should override variables
 from the `ap_common` role instead.
 
@@ -214,8 +213,8 @@ and to use a WiFi card supporting AP mode as a 5GHz AP.
 
 The following variables can be used to configure the AP:
 
-* `ap5_interface_name`: defines how the interface used for the 5GHz AP will be
-  renamed;
+* `ap5_interface_name`: defines how the interface used for the 5GHz AP
+  will be renamed;
 * `ap5_interface_mac`: the AP interface is selected by its MAC address
   in colon format (e.g., `00:11:22:33:44:55`);
 * `ap5_channel`: WiFi channel for the AP, default value is `36`;
@@ -224,8 +223,8 @@ The following variables can be used to configure the AP:
   `ap_common_country`;
 * `ap5_country3`: extra country code byte that controls indoor/outdoor
   usage of the AP. The default is `0x49`, for indoor-only use;
-* `ap5_ssid`: SSID of the 5GHz network. If not overridden, it will
-  use the value of `ap_common_ssid`;
+* `ap5_ssid`: SSID of the 5GHz network. If not overridden, it will use
+  the value of `ap_common_ssid`;
 * `ap5_password`: ASCII WPA/WPA2 passphrase used for authentication. If
   not overridden, it will use the value of `ap_common_wifi_password`.
 
@@ -233,20 +232,21 @@ For each new setup, the only variable which requires tweaking is
 `ap5_interface_mac`, as every adapter will have its own MAC. Changing
 the channel may or may not be useful in your environment.
 
-Country code, SSID and WPA password can be either set top unique values
-or shared with the 2.4GHz AP. In that case, you should override variables
-from the `ap_common` role instead.
+Country code, SSID and WPA password can be either set to unique values
+or shared with the 2.4GHz AP. In that case, you should override
+variables from the `ap_common` role instead.
 
 The template file `hostapd.conf.j2` may need to be customized if you
-need to change device capabilities or other low-level device settings.
+need to change low-level device settings.
 
 ### Common AP settings
 
-Performed by role `ap_common`. This role acts as a dependency, and cannot
-be enabled or disabled on its own. It is called by other AP roles.
+Performed by role `ap_common`. This role acts as a dependency, and
+cannot be enabled or disabled on its own. It is called by other AP
+roles.
 
 ```yaml
-# Base SSID used for boith 2.4GHz and 5GHz if not overridden
+# Base SSID used for both 2.4GHz and 5GHz if not overridden
 ap_common_ssid: MYSSID
 # Global country code
 ap_common_country: IT
@@ -254,9 +254,9 @@ ap_common_country: IT
 ap_common_wifi_password: abcd$123
 ```
 
-It defines the SSID, country code and password variable, which are
-inherited by `ap24` and `ap5`, unless overridden. It is useful to set the same
-configuration for both bands at once.
+It defines the SSID, country code and password variables, which are
+inherited by `ap24` and `ap5`, unless overridden. It is useful to set
+the same configuration for both bands at once.
 
 ### Wired LAN
 
@@ -266,13 +266,13 @@ Enabled or disabled via `enable_wired_lan`. Performed by role
 If enabled, it will configure a single wired interface to join the LAN.
 A single device can be attached to this interface directly, or a
 physical L2 switch may be used to attach multiple devices. Every host
-can see all other wireless nodes and gets its address from the local
-DHCP server.
+can see all other wired/wireless nodes and gets its address from the
+local DHCP server.
 
 The following variables can be used:
 
-* `wired_lan_interface_name`: this is the final name the chosen LAN interface
-  will be renamed to;
+* `wired_lan_interface_name`: this is the final name the chosen LAN
+  interface will be renamed to;
 * `wired_lan_interface_mac`: the interface is selected by its MAC
   address in colon format (e.g., `00:11:22:33:44:55`).
 
@@ -292,29 +292,27 @@ The following variables can be used:
 
 * `lan_bridge_interface_name`: the name of the bridge. Must be a valid
   Linux interface name;
-  
 * `lan_bridge_ip`: IPv4 assigned to the bridge interface, used to
-  address the router itself. Must be given in CIDR notation (e.g.,`10.0.1.1/24`);
+  address the router itself. Must be given in CIDR notation
+  (e.g.,`10.0.1.1/24`);
 * `lan_bridge_extra_nameservers`: a list of additional name servers that
   `dnsmasq` will use to resolve domain names;
-  
 * `lan_bridge_dhcp_range_start`: this is the first address of the DHCP
   pool, inclusive (e.g., `10.0.1.100`);
-  
 * `lan_bridge_dhcp_range_end:`: this is the last address of the DHCP
   pool, inclusive (e.g., `10.0.1.199`);
-  
-* `lan_bridge_dhcp_reservations`: this is the a list of MAC reservations. Each
-  reservation is an object with a `mac` and an `ip` fields:
-  
+* `lan_bridge_dhcp_reservations`: this is the list of MAC reservations.
+  Each reservation is an object with a `mac` and an `ip` fields:
+
   ```yaml
   lan_bridge_dhcp_reservations:
     - mac: "11:22:33:44:55:66"
       ip: "10.0.1.10"
   ```
 
-Currently, it is not possible to disable DHCP; however, hosts can still be
-configured to use static addresses, and the DHCP range can be very small.
+Currently, it is not possible to disable DHCP; however, hosts can still
+be configured to use static addresses, and the DHCP range can be very
+small.
 
 `lan_bridge_ip` must lay outside the DHCP range. Currently, this is not
 checked nor is checked that they are on the same subnet. 
@@ -420,7 +418,7 @@ chains/sets, depending on the location of the target service:
   ipset save > /etc/iptables/ipsets
   ```
 * For services running on a LAN node, define the appropriate DNAT rule,
-  adding it top the `PORTFWD` chain in the NAT table:
+  adding it to the `PORTFWD` chain in the NAT table:
 
   ```sh
   # DNAT connections for local port 2222/TCP to 192.168.1.100:4444
@@ -460,7 +458,7 @@ to automatically setup VirtualBox passthrough filters). Leaving a VID
 blank will disable the corresponding AP from the playbook execution.
 
 By defining `*_PROVISIONER` to point to a file, it will automatically be
-invoked as an Ansible playbook prior to running *routerify*. This is
+invoked as an Ansible playbook prior to running `routerify`. This is
 optional and useful if your AP device needs additional setup to work
 (i.e. firmware files).
 
