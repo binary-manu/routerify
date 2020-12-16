@@ -128,7 +128,7 @@ The following variables control global execution:
 
 A set of variables enable or disable optional features:
 
-* `enable_rtl8812u`: if set to `true`, the playbook will install the
+* `enable_rtl8812bu`: if set to `true`, the playbook will install the
   out-of-tree driver for the Realtek RTL8812BU wireless chipset via
   DMKS;
 * `enable_ap5`: if set to `true`, support for a single 5GHz AP is
@@ -146,7 +146,7 @@ By default, _all_ of the feature variables above are enabled.
 
 ### Realtek RTL8812BU driver support
 
-Enabled or disabled via `enable_rtl8812u`. Performed by role
+Enabled or disabled via `enable_rtl8812bu`. Performed by role
 `rtl8812bu`.
 
 Generally speaking, the playbook is agnostic to the devices used to

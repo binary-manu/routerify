@@ -9,7 +9,7 @@
   roles:
     - role: lan-bridge/defaults
     - role: rtl8812bu
-      when: enable_rtl8812u
+      when: enable_rtl8812bu
     - role: ap5
       vars:
         args_in:
