@@ -12,6 +12,8 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.2.0] - 2020-12-18
+
 ### Fixed
 
 * `iptables` rules have been reworked to better handle common
