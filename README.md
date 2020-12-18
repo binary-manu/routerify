@@ -192,10 +192,38 @@ The following variables can be used to configure the AP:
   use the value of `ap_common_ssid`, with `-24` appended;
 * `ap24_password`: ASCII WPA/WPA2 passphrase used for authentication. If
   not overridden, it will use the value of `ap_common_wifi_password`.
+* `ap24_ht_enable`: if set to `true`, the 2.4GHz AP will advertise and
+  employ HT (802.11n) capabilities, like 40MHz channels;
+* `ap24_ht_capabilities`: a set of HT (802.11n) capabilities that should
+  be enabled for the AP device. It is a single string that is obtained
+  by concatenating individual capability names, each one enclosed in
+  square brackets. This syntax is what `hostapd` expects. Consult
+  `hostapd`'s configuration file for a complete list of capabilities.
 
-For each new setup, the only variable which requires tweaking is
-`ap24_interface_mac`, as every adapter will have its own MAC. Changing
-the channel may or may not be useful in your environment.
+To discover which capabilities are supported by your device, use `iw
+phy`, then look for your device and search for `Capabilities`.
+Capabilities look like this:
+
+```
+Capabilities: 0x19ef
+    RX LDPC
+    HT20/HT40
+    SM Power Save disabled
+    RX HT20 SGI
+    RX HT40 SGI
+    TX STBC
+    RX STBC 1-stream
+    Max AMSDU length: 7935 bytes
+    DSSS/CCK HT40
+```
+
+Mapping the description provided by `iw` to `hostapd` capability names
+should be straightforward with the help of the configuration file.
+
+For each new setup, the only variables which require tweaking are
+`ap24_interface_mac`, as every adapter will have its own MAC, and
+capabilities, to take advantage of your specific hardware features.
+Changing the channel may or may not be useful in your environment.
 
 Country code, SSID, and WPA password can be either set to unique values
 or shared with the 5GHz AP. In that case, you should override variables
@@ -227,10 +255,53 @@ The following variables can be used to configure the AP:
   the value of `ap_common_ssid`;
 * `ap5_password`: ASCII WPA/WPA2 passphrase used for authentication. If
   not overridden, it will use the value of `ap_common_wifi_password`.
+* `ap5_vht_enable`: if set to `true`, the 5GHz AP will advertise and
+  employ VHT (802.11ac) capabilities, like 80MHz channels;
+* `ap5_ht_capabilities`: a set of HT (802.11n) capabilities that should
+  be enabled for the AP device. It is a single string that is obtained
+  by concatenating individual capability names, each one enclosed in
+  square brackets. This syntax is what `hostapd` expects. Consult
+  `hostapd`'s configuration file for a complete list of capabilities.
+* `ap5_vht_capabilities`: a set of VHT capabilities that should be
+  enabled for the AP device. It is a single string that is obtained by
+  concatenating individual capability names, each one enclosed in square
+  brackets. This syntax is what `hostapd` expects. Consult `hostapd`'s
+  configuration file for a complete list of capabilities.
 
-For each new setup, the only variable which requires tweaking is
-`ap5_interface_mac`, as every adapter will have its own MAC. Changing
-the channel may or may not be useful in your environment.
+To discover which capabilities are supported by your device, use `iw
+phy`, then look for your device and search for `Capabilities`  or
+`VHT Capabilities`. Capabilities look like this:
+
+```
+Capabilities: 0x19ef
+    RX LDPC
+    HT20/HT40
+    SM Power Save disabled
+    RX HT20 SGI
+    RX HT40 SGI
+    TX STBC
+    RX STBC 1-stream
+    Max AMSDU length: 7935 bytes
+    DSSS/CCK HT40
+
+VHT Capabilities (0x039071f6):
+    Max MPDU length: 11454
+    Supported Channel Width: 160 MHz
+    RX LDPC
+    short GI (80 MHz)
+    short GI (160/80+80 MHz)
+    TX STBC
+    SU Beamformee
+    MU Beamformee
+```
+
+Mapping the description provided by `iw` to `hostapd` capability names
+should be straightforward with the help of the configuration file.
+
+For each new setup, the only variables which require tweaking are
+`ap5_interface_mac`, as every adapter will have its own MAC, and
+capabilities, to take advantage of your specific hardware features.
+Changing the channel may or may not be useful in your environment.
 
 Country code, SSID and WPA password can be either set to unique values
 or shared with the 2.4GHz AP. In that case, you should override
