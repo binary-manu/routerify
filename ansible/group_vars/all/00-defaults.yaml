@@ -13,7 +13,7 @@ global_netplan_wan_order: 10
 global_netplan_bridge_order: 20
 
 ### Feature enable/disable ###
-enable_rtl8812u: yes
+enable_rtl8812bu: yes
 enable_ap5: yes
 enable_ap24: yes
 enable_wired_lan: yes
