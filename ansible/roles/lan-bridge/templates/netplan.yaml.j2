@@ -6,10 +6,10 @@ network:
       link-local: []
       addresses:
         - {{ lan_bridge_ip }}
-      {%- if args_in.slaves %}
+      {%- if lan_bridge_slaves %}
 
       interfaces:
-        {%- for iface in args_in.slaves %}
+        {%- for iface in lan_bridge_slaves %}
 
         - {{ iface }}
         {% endfor %}

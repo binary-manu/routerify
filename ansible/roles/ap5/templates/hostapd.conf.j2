@@ -3,8 +3,8 @@ ctrl_interface_group=0
 ctrl_interface=/run/hostapd
 driver=nl80211
 interface={{ ap5_interface_name }}
-{% if args_in.bridge | default(False) %}
-bridge={{ args_in.bridge }}
+{% if ap5_bridge | default(False) %}
+bridge={{ ap5_bridge }}
 {% endif %}
 logger_stdout=-1
 logger_stdout_level=5

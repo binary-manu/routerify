@@ -5,18 +5,18 @@
 :OUTPUT ACCEPT [0:0]
 
 :LOCAL_SERVICES - [0:0]
--A LOCAL_SERVICES -i {{ args_in.wan_nic }} -p tcp -m set --match-set TCPLOCALPORTS dst -j ACCEPT
--A LOCAL_SERVICES -i {{ args_in.wan_nic }} -p udp -m set --match-set UDPLOCALPORTS dst -j ACCEPT
--A LOCAL_SERVICES ! -i {{ args_in.wan_nic }} -p tcp -m set --match-set TCPOTHERPORTS dst -j ACCEPT
--A LOCAL_SERVICES ! -i {{ args_in.wan_nic }} -p udp -m set --match-set UDPOTHERPORTS dst -j ACCEPT
+-A LOCAL_SERVICES -i {{ routing_wan_nic }} -p tcp -m set --match-set TCPLOCALPORTS dst -j ACCEPT
+-A LOCAL_SERVICES -i {{ routing_wan_nic }} -p udp -m set --match-set UDPLOCALPORTS dst -j ACCEPT
+-A LOCAL_SERVICES ! -i {{ routing_wan_nic }} -p tcp -m set --match-set TCPOTHERPORTS dst -j ACCEPT
+-A LOCAL_SERVICES ! -i {{ routing_wan_nic }} -p udp -m set --match-set UDPOTHERPORTS dst -j ACCEPT
 
--A INPUT -i {{ args_in.wan_nic }} -m state --state RELATED,ESTABLISHED -j ACCEPT
--A INPUT -i {{ args_in.lan_nic }} -j ACCEPT
+-A INPUT -i {{ routing_wan_nic }} -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -i {{ routing_lan_nic }} -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -j LOCAL_SERVICES
 
--A FORWARD -i {{ args_in.wan_nic }} -m conntrack --ctstate RELATED,ESTABLISHED,DNAT -j ACCEPT
--A FORWARD -i {{ args_in.lan_nic }} -j ACCEPT
+-A FORWARD -i {{ routing_wan_nic }} -m conntrack --ctstate RELATED,ESTABLISHED,DNAT -j ACCEPT
+-A FORWARD -i {{ routing_lan_nic }} -j ACCEPT
 
 COMMIT
 
@@ -32,8 +32,8 @@ COMMIT
 -A PORTFWD -p {{ rule.protocol }} --dport {{ rule.local_port }} -j DNAT --to-destination {{ rule.remote_ip }}:{{ rule.remote_port }}
 {% endfor %}
 
--A PREROUTING -i {{ args_in.wan_nic }} -j PORTFWD
--A POSTROUTING -o {{ args_in.wan_nic }} -j MASQUERADE
+-A PREROUTING -i {{ routing_wan_nic }} -j PORTFWD
+-A POSTROUTING -o {{ routing_wan_nic }} -j MASQUERADE
 
 COMMIT
 
@@ -43,7 +43,7 @@ COMMIT
 -A COMMONATTACKS_STATEFUL -p tcp ! --syn -m state --state NEW -j DROP
 
 :PREROUTING ACCEPT [0:0]
--A PREROUTING -i {{ args_in.wan_nic }} -j COMMONATTACKS_STATEFUL
+-A PREROUTING -i {{ routing_wan_nic }} -j COMMONATTACKS_STATEFUL
 
 COMMIT
 
@@ -59,7 +59,7 @@ COMMIT
 -A COMMONATTACKS_STATELESS -p tcp --tcp-flags ALL NONE -j DROP
 
 :PREROUTING ACCEPT [0:0]
--A PREROUTING -i {{ args_in.wan_nic }} -j PUBLIC_IP_ONLY
--A PREROUTING -i {{ args_in.wan_nic }} -j COMMONATTACKS_STATELESS
+-A PREROUTING -i {{ routing_wan_nic }} -j PUBLIC_IP_ONLY
+-A PREROUTING -i {{ routing_wan_nic }} -j COMMONATTACKS_STATELESS
 
 COMMIT
