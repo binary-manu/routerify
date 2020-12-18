@@ -22,6 +22,15 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
   Contributed by [dgabriel123](https://github.com/dgabriel123).
 * Ansible variable `enable_rtl8812u` has been renamed to `enable_rtl8812bu`,
   to reflect the full, correct chip name.
+* Documented some AP-related variables that were left behind.
+* It is now possible to disable VHT when using the RTL8812BU.
+* Fixed disabling APs via `ap_spec.rb`.
+
+### Changed
+
+* All arguments passed to role invocations are now passed as parameters
+  rather than as variables. This way, each parameter applies to that
+  specific invocation only.
 
 ## [0.1.0] - 2020-12-13
 
