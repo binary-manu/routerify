@@ -66,10 +66,10 @@ Vagrant.configure("2") do |config|
     ]
   }
   if AP24_VID == ""
-    extra_vars.merge({ enable_ap24: no })
+    extra_vars = extra_vars.merge({ enable_ap24: false })
   end
   if AP5_VID == ""
-    extra_vars.merge({ enable_ap5: no })
+    extra_vars = extra_vars.merge({ enable_ap5: false })
   end
 
   config.vm.provision "ansible" do |ans|
