@@ -16,15 +16,15 @@
   lineinfile:
     path: "{{ rtl8812bu_source_project_dir }}/dkms.conf"
     regex: '^PACKAGE_VERSION="@PKGVER@"$'
-    line: 'PACKAGE_VERSION="{{ rtl88x2bu_dkms_version }}"'
+    line: 'PACKAGE_VERSION="{{ rtl8812bu_dkms_version }}"'
 
-- name: Add modprobe option to enable 80MHz channel in 802.11ac
-  copy:
-    src: 88x2bu.conf
+- name: Add modprobe option to enable/disable 80MHz channel in 802.11ac
+  template:
+    src: 88x2bu.conf.j2
     dest: /etc/modprobe.d/88x2bu.conf
 
 - name: Add driver to DKMS
   shell: |
     cd '{{ rtl8812bu_source_project_dir }}'
-    dkms remove {{ rtl88x2bu_dkms_name }}/{{ rtl88x2bu_dkms_version }} || true
+    dkms remove {{ rtl8812bu_dkms_name }}/{{ rtl8812bu_dkms_version }} || true
     dkms install .

@@ -8,8 +8,6 @@
         update_cache: yes
   roles:
     - role: lan-bridge/defaults
-    - role: rtl8812bu
-      when: enable_rtl8812bu
     - role: ap5
       ap5_bridge: "{{ lan_bridge_interface_name }}"
       when: enable_ap5
@@ -33,5 +31,8 @@
       routing_wan_nic: "{{ wan_ppp_interface_name }}"
     - role: powersave
       when: enable_powersave
+    - role: rtl8812bu
+      rtl8812bu_vht_enable: "{{ ap5_vht_enable }}"
+      when: enable_rtl8812bu
 
 # vi: set sts=-1 et sw=2 :

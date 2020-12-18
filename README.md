@@ -171,6 +171,12 @@ Fine-tuning of this feature can be obtained via the variables define in
 used to download the driver, and the expected naming of the extracted
 folder.
 
+It seems that the only way to enable or disable 80MHz channels in
+802.11ac mode is via kernel module parameters. `hostapd` settings cannot
+override those. For this reason, this role has its own VHT flag,
+`rtl8812bu_vht_enable`, which simply takes whatever value is defined for
+`ap5_vht_enable`.
+
 ### 2.4GHz AP
 
 Enabled or disabled via `enable_ap24`. Performed by role `ap24`.
