@@ -1,4 +1,4 @@
-load "./ap_spec.rb"
+load File.join(__dir__, "ap_spec.rb")
 
 WAN_MAC  = "08:00:27:00:00:02"
 WAN_IP   = "10.0.2.1/24"
