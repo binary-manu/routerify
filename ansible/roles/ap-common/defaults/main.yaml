@@ -4,3 +4,5 @@ ap_common_ssid: MYSSID
 ap_common_country: IT
 # Default password shared between bands
 ap_common_wifi_password: abcd$1234
+# Enable the weaker TKIP pairwise algorithm
+ap_common_use_tkip: no

@@ -8,3 +8,4 @@ ap5_password: "{{ ap_common_wifi_password }}"
 ap5_ht_capabilities: "[LDPC][HT40+][SHORT-GI-20][SHORT-GI-40][DSSS_CCK-40][MAX-AMSDU-7935]"
 ap5_vht_enable: yes
 ap5_vht_capabilities: "[MAX-MPDU-7991][RXLDPC][SHORT-GI-80][TX-STBC-2BY1][HTC-VHT][SU-BEAMFORMEE][MAX-A-MPDU-LEN-EXP3]"
+ap5_use_tkip: "{{ ap_common_use_tkip }}"
