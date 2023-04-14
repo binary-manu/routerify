@@ -22,7 +22,7 @@
       lan_bridge_slaves: >
         {%- set l = [] -%}
         {%- if enable_wired_lan -%}
-          {%- set l = l + [wired_lan_interface_name] -%}
+          {%- set l = l + wired_lan_interfaces | map(attribute='name') -%}
         {%- endif -%}
         {{- l -}}
     - role: wan

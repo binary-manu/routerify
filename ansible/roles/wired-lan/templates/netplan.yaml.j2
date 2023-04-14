@@ -2,8 +2,8 @@ network:
   version: 2
   renderer: networkd
   ethernets:
-    {{ wired_lan_interface_name }}:
+    {{ nic.name }}:
       match:
-        macaddress: {{ wired_lan_interface_mac }}
-      set-name: {{ wired_lan_interface_name }}
+        macaddress: {{ nic.mac }}
+      set-name: {{ nic.name }}
       link-local: []
