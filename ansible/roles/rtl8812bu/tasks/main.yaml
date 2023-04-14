@@ -21,3 +21,8 @@
 
 - include_tasks: install.yaml
   when: dkms_check.stdout == ""
+
+- name: Add modprobe options
+  template:
+    src: 88x2bu.conf.j2
+    dest: /etc/modprobe.d/88x2bu.conf

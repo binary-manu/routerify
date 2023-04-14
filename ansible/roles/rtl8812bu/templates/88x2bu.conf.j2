@@ -1,1 +1,4 @@
-options 88x2bu rtw_low_power=0 rtw_vht_enable={% if rtl8812bu_vht_enable %}2{% else %}0{% endif %}
+options 88x2bu {# -#}
+  rtw_low_power=0 {# -#}
+  rtw_vht_enable={% if rtl8812bu_vht_enable %}2{% else %}0{% endif %} {# -#}
+  rtw_switch_usb_mode={% if rtl8812bu_usb_superspeed %}1{% else %}2{% endif %}

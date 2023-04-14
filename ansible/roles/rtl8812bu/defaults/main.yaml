@@ -4,3 +4,4 @@ rtl8812bu_source_project_dir: "{{ rtl8812bu_source_dir }}/RTL88x2BU-Linux-Driver
 rtl8812bu_dkms_name: rtl88x2bu
 rtl8812bu_dkms_version: git
 rtl8812bu_vht_enable: yes
+rtl8812bu_usb_superspeed: no # Default is high speed as superspeed does not always work well
