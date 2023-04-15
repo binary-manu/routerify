@@ -16,6 +16,8 @@ Vagrant.configure("2") do |config|
     # Make WAN & LAN NIC MAC's predictable
     vb.customize ["modifyvm", :id, "--macaddress2", WAN_MAC.gsub(/:/, "")]
     vb.customize ["modifyvm", :id, "--macaddress3", LAN_MAC.gsub(/:/, "")]
+    # LAN interface must be in promiscuos mode to handle bridged packets
+    vb.customize ["modifyvm", :id, "--nic-promisc3", "allow-all"]
 
     # Passthrough USB devices that will act as AP24/AP5
     vb.customize ["modifyvm", :id, "--usbehci", "on", "--usbohci", "on"]
