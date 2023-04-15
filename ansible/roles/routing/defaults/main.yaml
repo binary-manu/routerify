@@ -19,3 +19,7 @@ routing_spoof_ranges:
   - 192.168.0.0/16
   - 224.0.0.0/3
   - 240.0.0.0/4
+
+routing_no_internet_clients: [
+  # 11:22:33:44:55:66
+]

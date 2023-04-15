@@ -10,12 +10,16 @@
 -A LOCAL_SERVICES ! -i {{ routing_wan_nic }} -p tcp -m set --match-set TCPOTHERPORTS dst -j ACCEPT
 -A LOCAL_SERVICES ! -i {{ routing_wan_nic }} -p udp -m set --match-set UDPOTHERPORTS dst -j ACCEPT
 
+:NO_INTERNET_CLIENTS - [0:0]
+-A NO_INTERNET_CLIENTS -o {{ routing_wan_nic }} -m set --match-set NOINTERNETCLIENTS src -j DROP
+
 -A INPUT -i {{ routing_wan_nic }} -m state --state RELATED,ESTABLISHED -j ACCEPT
 -A INPUT -i {{ routing_lan_nic }} -j ACCEPT
 -A INPUT -i lo -j ACCEPT
 -A INPUT -j LOCAL_SERVICES
 
 -A FORWARD -i {{ routing_wan_nic }} -m conntrack --ctstate RELATED,ESTABLISHED,DNAT -j ACCEPT
+-A FORWARD -j NO_INTERNET_CLIENTS
 -A FORWARD -i {{ routing_lan_nic }} -j ACCEPT
 
 COMMIT
