@@ -1,0 +1,6 @@
+rtl8821ce_archive_url: https://github.com/tomaspinho/rtl8821ce/archive/refs/heads/master.zip
+rtl8821ce_source_dir: /tmp/rtl8821ce
+rtl8821ce_source_project_dir: "{{ rtl8821ce_source_dir }}/rtl8821ce-master"
+rtl8821ce_dkms_name: rtl8821ce
+rtl8821ce_dkms_version: git
+rtl8821ce_vht_enable: yes

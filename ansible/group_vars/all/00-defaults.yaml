@@ -14,6 +14,7 @@ global_netplan_bridge_order: 20
 
 ### Feature enable/disable ###
 enable_rtl8812bu: yes
+enable_rtl8821ce: no
 enable_ap5: yes
 enable_ap24: yes
 enable_wired_lan: yes

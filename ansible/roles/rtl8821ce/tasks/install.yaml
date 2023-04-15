@@ -1,0 +1,25 @@
+- name: Create directory for driver sources
+  file:
+    path: "{{ rtl8821ce_source_dir }}"
+    state: "{{ item }}"
+  loop:
+    - absent
+    - directory
+
+- name: Download driver sources
+  unarchive:
+    remote_src: yes
+    src: "{{ rtl8821ce_archive_url }}"
+    dest: "{{ rtl8821ce_source_dir }}"
+
+- name: Patch driver version
+  lineinfile:
+    path: "{{ rtl8821ce_source_project_dir }}/dkms.conf"
+    regex: '^PACKAGE_VERSION="#MODULE_VERSION#"$'
+    line: 'PACKAGE_VERSION="{{ rtl8821ce_dkms_version }}"'
+
+- name: Add driver to DKMS
+  shell: |
+    cd '{{ rtl8821ce_source_project_dir }}'
+    dkms remove {{ rtl8821ce_dkms_name }}/{{ rtl8821ce_dkms_version }} || true
+    dkms install .

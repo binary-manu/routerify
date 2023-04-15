@@ -1,0 +1,28 @@
+- name: Ensure the build system is installed
+  apt:
+    state: present
+    name:
+      - dkms
+      - unzip
+      - bc
+    install_recommends: yes
+
+- name: Read kernel release
+  shell: uname -r
+  register: _krel
+
+- name: Check if the driver is already installed (any version)
+  shell: >
+    dkms status |
+    sed -n '/^{{ rtl8821ce_dkms_name  |
+    regex_escape("posix_basic") }}, [^,]\+, {{  _krel.stdout_lines[0]
+    | regex_escape("posix_basic") }}, [^:]\+: installed$/{ p; q; }'
+  register: dkms_check
+
+- include_tasks: install.yaml
+  when: dkms_check.stdout == ""
+
+- name: Add modprobe options
+  template:
+    src: 8821ce.conf.j2
+    dest: /etc/modprobe.d/8821ce.conf
