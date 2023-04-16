@@ -10,6 +10,7 @@
 - name: Read kernel release
   shell: uname -r
   register: _krel
+  changed_when: no
 
 - name: Check if the driver is already installed (any version)
   shell: >
@@ -18,6 +19,7 @@
     regex_escape("posix_basic") }}, [^,]\+, {{  _krel.stdout_lines[0]
     | regex_escape("posix_basic") }}, [^:]\+: installed$/{ p; q; }'
   register: dkms_check
+  changed_when: no
 
 - include_tasks: install.yaml
   when: dkms_check.stdout == ""
