@@ -7,6 +7,9 @@
       apt:
         update_cache: yes
       changed_when: no
+      # When reconfigureing a working instance, do not assume Internet access
+      # is available.
+      when: not reconfigure_now
   roles:
     # Import some variables used below
     - role: lan-bridge/defaults
