@@ -1,2 +1,11 @@
 - name: Update GRUB configuration
   command: update-grub
+
+- name: Reload iptables rules
+  service:
+    name: netfilter-persistent
+    state: restarted
+
+- name: Reload sysctls
+  command: sysctl -p {{ routing_sysctl_forward_file | quote }}
+

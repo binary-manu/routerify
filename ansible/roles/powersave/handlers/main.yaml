@@ -1,5 +1,8 @@
-- name: Enable console-power
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+
+- name: Restart console-power
   systemd:
     name: console-power
-    enabled: yes
-    daemon_reload: yes
+    state: restarted

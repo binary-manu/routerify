@@ -1,10 +1,16 @@
 - name: Copy netplan configuration files for the wired LAN
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
+    nic: "{{ item }}"
   template:
     src: netplan.yaml.j2
     dest: "/etc/netplan/{{ global_netplan_slave_order }}-{{ item.name }}.yaml"
     mode: "644"
     owner: root
     group: root
-  vars:
-    nic: "{{ item }}"
   loop: "{{ wired_lan_interfaces }}"
+  <<: *register
+  notify: "netplan : Apply netplan configuration"

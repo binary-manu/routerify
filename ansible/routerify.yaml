@@ -8,13 +8,26 @@
         update_cache: yes
       changed_when: no
   roles:
+    # Import some variables used below
     - role: lan-bridge/defaults
+
+    # Install optional out-of-tree WiFi card drivers
+    - role: rtl8812bu
+      rtl8812bu_vht_enable: "{{ ap5_vht_enable }}"
+      when: enable_rtl8812bu
+    - role: rtl8821ce
+      rtl8821ce_vht_enable: "{{ ap5_vht_enable }}"
+      when: enable_rtl8821ce
+
+    # Prepare APs
     - role: ap5
       ap5_bridge: "{{ lan_bridge_interface_name }}"
       when: enable_ap5
     - role: ap24
       ap24_bridge: "{{ lan_bridge_interface_name }}"
       when: enable_ap24
+
+    # Setup wired LAN bridge and slaves
     - role: wired-lan
       when: enable_wired_lan
     - role: lan-bridge
@@ -26,14 +39,15 @@
           {%- set l = l + wired_lan_interfaces | map(attribute='name') -%}
         {%- endif -%}
         {{- l -}}
+
+    # Prepare uplink connection and routing
     - role: wan
     - role: routing
       routing_lan_nic: "{{ lan_bridge_interface_name }}"
       routing_wan_nic: "{{ wan_ppp_interface_name }}"
+
+    # Extra tuning
     - role: powersave
       when: enable_powersave
-    - role: rtl8812bu
-      rtl8812bu_vht_enable: "{{ ap5_vht_enable }}"
-      when: enable_rtl8812bu
 
 # vi: set sts=-1 et sw=2 :

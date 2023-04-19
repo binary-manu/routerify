@@ -1,4 +1,9 @@
 - name: Forbid system sleep, hibernate, etc...
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
   ini_file:
     path: /etc/systemd/sleep.conf
     create: no
@@ -16,6 +21,8 @@
       value: "no"
     - option: AllowHybridSleep
       value: "no"
+  <<: *register
+  notify: Reload systemd
 
 - name: Install service to poweroff the TTY
   template:
@@ -24,7 +31,11 @@
     owner: root
     group: root
     mode: "644"
-  notify: Enable console-power
-  register: self_result
-  changed_when: self_result.changed or run_handlers
+  <<: *register
+  notify: Restart console-power
 
+- name: Enable console-power
+  systemd:
+    name: console-power
+    enabled: yes
+    daemon_reload: yes

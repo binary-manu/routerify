@@ -1,13 +1,17 @@
 - name: Copy configuration for 5GHz AP
-  notify: Enable hostapd@{{ ap5_interface_name }}
-  register: self_result
-  changed_when: self_result.changed or run_handlers
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
   template:
     src: hostapd.conf.j2
     dest: "/etc/hostapd/{{ ap5_interface_name }}.conf"
     mode: "600"
     owner: root
     group: root
+  <<: *register
+  notify: Restart hostapd@{{ ap5_interface_name }}
 
 - name: Copy netplan configuration files for 5GHz AP
   template:
@@ -16,3 +20,11 @@
     mode: "644"
     owner: root
     group: root
+  <<: *register
+  notify: "netplan : Apply netplan configuration"
+
+- name: Enable hostapd@{{ ap5_interface_name }}
+  service:
+    name: hostapd@{{ ap5_interface_name }}
+    enabled: yes
+

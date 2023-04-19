@@ -6,14 +6,23 @@
       - networkd-dispatcher
 
 - name: Copy netplan configuration for the WAN
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
   template:
     src: netplan.yaml.j2
     dest: "/etc/netplan/{{ global_netplan_wan_order }}-{{ wan_interface_name }}.yaml"
+  <<: *register
+  notify: "netplan : Apply netplan configuration"
 
 - name: Copy vlan name policy settings
   copy:
     src: vlan.link
     dest: /etc/systemd/network/{{ global_netplan_vlan_order }}-vlan-naming.link
+  <<: *register
+  notify: "netplan : Apply netplan configuration"
 
 - name: Copy PPPoE configuration files and scripts
   template:
@@ -33,6 +42,8 @@
       dest: /etc/ppp/peers/ftth-provider
       mode: "0640"
       group: dip
+  <<: *register
+  notify: "Establish PPPoE Link"
 
 - name: Link nocarrier.d and off.d scripts
   file:
@@ -44,3 +55,5 @@
   lineinfile:
     path: /etc/ppp/chap-secrets
     line: '"{{ wan_chap_username }}" * "{{ wan_chap_password }}"'
+  <<: *register
+  notify: "Establish PPPoE Link"

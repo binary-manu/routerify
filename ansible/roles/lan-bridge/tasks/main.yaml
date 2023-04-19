@@ -1,10 +1,17 @@
 - name: Copy netplan configuration for the LAN bridge
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
   template:
     src: netplan.yaml.j2
     dest: "/etc/netplan/{{ global_netplan_bridge_order }}-{{ lan_bridge_interface_name }}.yaml"
     owner: root
     group: root
     mode: "644"
+  <<: *register
+  notify: "netplan : Apply netplan configuration"
   
 - name: Install dnsmasq
   package:
@@ -13,19 +20,23 @@
 
 # Workaround: dnsmasq doesn't start during package
 # installation but borks /etc/resolv.conf. Restart it.
-- name: Workaround restart dnsmasq
-  service:
-    name: dnsmasq
-    state: started
+#- name: Workaround restart dnsmasq
+#  service:
+#    name: dnsmasq
+#    state: started
   
 - name: Configure dnsmasq for DHCP and DNS on the LAN
-  notify: Enable dnsmasq
-  register: self_result
-  changed_when: self_result.changed or run_handlers
   template:
     src: dnsmasq.conf.j2
     dest: /etc/dnsmasq.conf
     owner: root
     group: root
     mode: "644"
-  
+  <<: *register
+  notify: Restart dnsmasq
+
+- name: Enable dnsmasq
+  service:
+    name: dnsmasq
+    enabled: yes
+

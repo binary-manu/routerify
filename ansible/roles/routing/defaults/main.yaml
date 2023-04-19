@@ -23,3 +23,6 @@ routing_spoof_ranges:
 routing_no_internet_clients: [
   # 11:22:33:44:55:66
 ]
+
+routing_sysctl_forward_file: /etc/sysctl.d/forward.conf
+

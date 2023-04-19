@@ -3,6 +3,9 @@
 run_handlers: no
 # Don't stop on errors
 keep_going: no
+# Immediately restart services impacted by configuration changes
+# By default nothing is reloaded to avoid disrupting the networking
+reconfigure_now: no
 
 ### Global variables ###
 # Control netplan file ordering relative to each other.

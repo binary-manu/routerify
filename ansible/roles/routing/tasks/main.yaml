@@ -7,12 +7,19 @@
       - ipset-persistent
 
 - name: Copy iptables rules
+  vars:
+    ___anchors___:
+      register: &register
+        register: self_result
+        changed_when: run_handlers or (self_result.changed and reconfigure_now)
   template:
     src: rules.v4.j2
     dest: /etc/iptables/rules.v4
     owner: root
     group: root
     mode: "644"
+  <<: *register
+  notify: Reload iptables rules
 
 - name: Copy ipsets
   template:
@@ -21,14 +28,18 @@
     owner: root
     group: root
     mode: "640"
+  <<: *register
+  notify: Reload iptables rules
 
 - name: Copy forwarding sysctls
   copy:
     src: forward.conf
-    dest: /etc/sysctl.d/forward.conf
+    dest: "{{ routing_sysctl_forward_file }}"
     owner: root
     group: root
     mode: "644"
+  <<: *register
+  notify: Reload sysctls
 
 - name: Check if IPv6 is already disabled
   shell: |

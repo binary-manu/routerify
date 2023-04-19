@@ -1,4 +1,4 @@
-- name: Enable hostapd@{{ ap5_interface_name }}
+- name: Restart hostapd@{{ ap5_interface_name }}
   service:
     name: hostapd@{{ ap5_interface_name }}
-    enabled: yes
+    state: restarted

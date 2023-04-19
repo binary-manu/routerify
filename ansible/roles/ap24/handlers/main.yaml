@@ -1,4 +1,4 @@
-- name: Enable hostapd@{{ ap24_interface_name }}
+- name: Restart hostapd@{{ ap24_interface_name }}
   service:
     name: hostapd@{{ ap24_interface_name }}
-    enabled: yes
+    state: restarted
