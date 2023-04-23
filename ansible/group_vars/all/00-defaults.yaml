@@ -22,3 +22,4 @@ enable_ap5: yes
 enable_ap24: yes
 enable_wired_lan: yes
 enable_powersave: yes
+enable_unattended_upgrades: yes

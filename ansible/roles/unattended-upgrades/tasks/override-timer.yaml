@@ -1,0 +1,21 @@
+- file:
+    path:  "/etc/systemd/system/{{ timer }}.timer.d"
+    state: directory
+    mode:  "755"
+    owner: "root"
+    group: "root"
+
+- template:
+    src:   "systemd-timer-override.conf.j2"
+    dest:  "/etc/systemd/system/{{ timer }}.timer.d/override.conf"
+    mode:  "644"
+    owner: "root"
+    group: "root"
+  register: timer_changed
+
+- systemd:
+    service: "{{ timer }}.timer"
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  when: timer_changed.changed

@@ -1,0 +1,25 @@
+- name: Install unattended-upgrades
+  package:
+    state: present
+    name: unattended-upgrades
+
+
+- name: Write APT config for unattended upgrades
+  copy:
+    src:   "{{ item }}"
+    dest:  "/etc/apt/apt.conf.d/{{ item  }}"
+    mode:  "644"
+    owner: "root"
+    group: "root"
+  loop:
+    - 10periodic
+    - 20auto-upgrades
+    - 50unattended-upgrades
+
+- name: Override apt-daily timers
+  include_tasks: override-timer.yaml
+  vars:
+    timer: "{{ item }}"
+  loop:
+    - apt-daily
+    - apt-daily-upgrade
