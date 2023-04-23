@@ -58,7 +58,6 @@ Vagrant.configure("2") do |config|
     ap5_interface_mac:       AP5_MAC,
     wired_lan_interfaces:    [{mac: LAN_MAC, name: "lan"}],
     wan_interface_mac:       WAN_MAC,
-    run_handlers:            true,
     keep_going:              true,
     routing_other_rules:     [
       {
