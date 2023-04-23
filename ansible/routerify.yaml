@@ -7,8 +7,13 @@
       apt:
         update_cache: yes
       changed_when: no
-      # When reconfigureing a working instance, do not assume Internet access
+      # When reconfiguring a working instance, do not assume Internet access
       # is available.
+      when: not reconfigure_now
+    - name: "Disable systemd-networkd"
+      service:
+        name: systemd-networkd
+        enabled: no
       when: not reconfigure_now
   roles:
     # Import some variables used below
@@ -54,5 +59,16 @@
       when: enable_powersave
     - role: unattended-upgrades
       when: enable_unattended_upgrades
+  post_tasks:
+    - name: "Enable systemd-networkd"
+      service:
+        name: systemd-networkd
+        enabled: yes
+      when: not reconfigure_now
+    - name: "Disable /etc/network/interfaces networking"
+      service:
+        name: networking
+        enabled: no
+      when: not reconfigure_now
 
 # vi: set sts=-1 et sw=2 :
