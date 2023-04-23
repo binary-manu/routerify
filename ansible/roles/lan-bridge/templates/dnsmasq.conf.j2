@@ -1,5 +1,14 @@
 interface={{ lan_bridge_interface_name }}
 
+domain={{ lan_bridge_dhcp_domain }}
+local=/{{ lan_bridge_dhcp_domain }}/
+
+{% for entry in lan_bridge_host_aliases -%}
+{% for alias in entry.aliases -%}
+address=/{{ alias }}/{{ entry.ip }}
+{% endfor -%}
+{% endfor %}
+
 {% for br in lan_bridge_extra_nameservers -%}
 server={{ br }}
 {%- endfor %}
