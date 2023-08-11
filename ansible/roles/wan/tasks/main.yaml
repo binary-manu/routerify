@@ -2,7 +2,7 @@
   package:
     state: present
     name:
-      - pppoe
+      - ppp
       - networkd-dispatcher
 
 - name: Copy netplan configuration for the WAN

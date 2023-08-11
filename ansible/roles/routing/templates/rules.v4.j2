@@ -49,6 +49,9 @@ COMMIT
 :PREROUTING ACCEPT [0:0]
 -A PREROUTING -i {{ routing_wan_nic }} -j COMMONATTACKS_STATEFUL
 
+:POSTROUTING ACCEPT [0:0]
+-A POSTROUTING -o {{ routing_wan_nic }} -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --set-mss 1452
+
 COMMIT
 
 *raw

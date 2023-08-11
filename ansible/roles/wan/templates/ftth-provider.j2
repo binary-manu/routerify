@@ -1,4 +1,3 @@
-pty "/usr/sbin/pppoe -I {{ wan_vlan_interface_name }} -T 80 -m 1452"
 mtu 1492
 user "{{ wan_chap_username }}"
 noipdefault
@@ -7,7 +6,6 @@ defaultroute
 hide-password
 lcp-echo-interval 20
 lcp-echo-failure 3
-connect /bin/true
 noauth
 persist
 maxfail 0
@@ -16,3 +14,4 @@ default-asyncmap
 linkname {{ wan_ppp_interface_name }}
 local
 nocrtscts
+plugin rp-pppoe.so {{ wan_vlan_interface_name }}
