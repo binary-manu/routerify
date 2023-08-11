@@ -1,16 +1,17 @@
-- name: Ensure the build system is installed
-  apt:
-    state: present
-    name:
-      - dkms
-      - unzip
-      - bc
-    install_recommends: yes
-
 - name: Read kernel release
   shell: uname -r
   register: _krel
   changed_when: no
+
+- name: Ensure the build system is installed
+  apt:
+    state: present
+    name:
+      - linux-headers-{{ _krel.stdout_lines[0] }}
+      - dkms
+      - unzip
+      - bc
+    install_recommends: yes
 
 - name: Check if the driver is already installed (any version)
   shell: >
