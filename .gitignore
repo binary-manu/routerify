@@ -4,3 +4,4 @@
 /ansible/hosts.yaml
 /ansible/group_vars/**/*.yaml
 !/ansible/group_vars/00-defaults.yaml
+*~
