@@ -18,12 +18,12 @@
     state: present
     name: dnsmasq
 
-# Workaround: dnsmasq doesn't start during package
+# Workaround: on Debian 10, dnsmasq doesn't start during package
 # installation but borks /etc/resolv.conf. Restart it.
-#- name: Workaround restart dnsmasq
-#  service:
-#    name: dnsmasq
-#    state: started
+- name: Workaround restart dnsmasq
+  service:
+    name: dnsmasq
+    state: started
   
 - name: Configure dnsmasq for DHCP and DNS on the LAN
   template:
