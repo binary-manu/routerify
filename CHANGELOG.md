@@ -12,6 +12,30 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.0] - 2023-08-12
+
+### Added
+
+* Tested against Debian 10, 11 and 12.
+* Reconfigure a router via the playbook on the fly.
+* Handle daily unattended upgrades.
+* LAN hosts can be given DNS aliases (ex. `print.lan`).
+* Control the bus speed (High/Super) of the RTL8812BU.
+* TKIP can be disabled for increased security.
+* Block Internet access for specific clients by MAC address.
+* New role to install drivers for the RTL8821CE WiFi NIC.
+
+### Changed
+
+* PPPoE is handled using kernel-mode support.
+* Allow for more than one wired LAN NIC.
+
+### Fixed
+
+* Ensure that kernel sources for the currently running kernel are always installed.
+  Otherwise DKMS driver installation may fail.
+* Do not update APT lists when reconfiguring, as we may not have Internet connectivity.
+
 ## [0.2.0] - 2020-12-18
 
 ### Fixed
