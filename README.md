@@ -498,9 +498,7 @@ The following variables can be used:
 * `wan_vlan_id`: ID of the VLAN on which PPPoE traffic is sent. This is
   usually an ISP-provided value;
 * `wan_vlan_interface_name`: final name of the VLAN interface;
-* `wan_ppp_interface_name`: final name of the PPP interface. _Currently
-  renaming this interface does not work, so please do not override
-  this variable_.
+* `wan_ppp_interface_name`: final name of the PPP interface.
 
 ### Routing
 
