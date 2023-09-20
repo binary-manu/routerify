@@ -12,6 +12,7 @@ maxfail 0
 noaccomp
 default-asyncmap
 linkname {{ wan_ppp_interface_name }}
+ifname {{ wan_ppp_interface_name }}
 local
 nocrtscts
 plugin rp-pppoe.so {{ wan_vlan_interface_name }}
