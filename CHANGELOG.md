@@ -12,6 +12,8 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.1] - 2023-09-24
+
 ### Fixed
 
 * Implement renaming the PPP interface using `wan_ppp_interface_name`.
