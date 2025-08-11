@@ -13,9 +13,16 @@
     group: "root"
   register: timer_changed
 
+# Unmask the related service, which can be masked in the Vagrant box.
+# Idempotent on real ISO installs.
+- systemd:
+    service: "{{ timer }}.service"
+    masked: no
+    daemon_reload: yes
+  when: timer_changed.changed
+
 - systemd:
     service: "{{ timer }}.timer"
     state: restarted
     enabled: yes
-    daemon_reload: yes
   when: timer_changed.changed
