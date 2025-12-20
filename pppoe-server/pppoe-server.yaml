@@ -1,0 +1,37 @@
+- name: Prepare the router
+  hosts: all
+  ignore_errors: "{{ keep_going }}"
+  become: yes
+  pre_tasks:
+    - name: Update package lists
+      apt:
+        update_cache: yes
+      changed_when: no
+      # When reconfiguring a working instance, do not assume Internet access
+      # is available.
+      when: not reconfigure_now
+    - name: "Disable systemd-networkd"
+      service:
+        name: systemd-networkd
+        enabled: no
+      when: not reconfigure_now
+
+  roles:
+    # Prepare uplink connection and routing
+    - role: wan
+    - role: routing
+      routing_wan_nic: "{{ wan_uplink_interface_name }}"
+
+  post_tasks:
+    - name: "Enable systemd-networkd"
+      service:
+        name: systemd-networkd
+        enabled: yes
+      when: not reconfigure_now
+    - name: "Disable /etc/network/interfaces networking"
+      service:
+        name: networking
+        enabled: no
+      when: not reconfigure_now
+
+# vi: set sts=-1 et sw=2 :

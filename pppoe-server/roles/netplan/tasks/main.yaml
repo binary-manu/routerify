@@ -1,0 +1,4 @@
+- name: Install netplan
+  package:
+    state: present
+    name: netplan.io

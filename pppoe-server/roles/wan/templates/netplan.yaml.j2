@@ -1,0 +1,21 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    {{ wan_interface_name }}:
+      match:
+        macaddress: {{ wan_interface_mac }}
+      set-name: {{ wan_interface_name }}
+      link-local: []
+    {{ wan_uplink_interface_name }}:
+      match:
+        macaddress: {{ wan_uplink_interface_mac }}
+      set-name: {{ wan_uplink_interface_name }}
+      link-local: []
+      dhcp4: yes
+      dhcp6: no
+  vlans:
+    {{ wan_vlan_interface_name }}:
+      link: {{ wan_interface_name }}
+      id: {{ wan_vlan_id }}
+      link-local: []

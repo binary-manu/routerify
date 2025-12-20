@@ -1,0 +1,11 @@
+wan_interface_name: wan
+wan_interface_mac: 01:02:03:04:05:06
+wan_uplink_interface_name: uplink
+wan_uplink_interface_mac: 0a:0b:0c:0d:0e:0f
+wan_chap_username: chap_username
+wan_chap_password: chap_password
+wan_vlan_id: 835
+wan_vlan_interface_name: vlan{{ wan_vlan_id }}
+wan_ppp_interface_name: ppp0
+wan_server_ip: 100.64.0.1
+wan_client_ip: 100.64.0.2

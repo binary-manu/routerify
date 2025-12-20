@@ -1,0 +1,14 @@
+### Execution control ###
+# Always force handlers to run
+run_handlers: no
+# Don't stop on errors
+keep_going: no
+# Immediately restart services impacted by configuration changes
+# By default nothing is reloaded to avoid disrupting the networking
+reconfigure_now: no
+
+### Global variables ###
+# Control netplan file ordering relative to each other.
+# Don't change them unless something is not working.
+global_netplan_vlan_order: "05"
+global_netplan_wan_order: 10

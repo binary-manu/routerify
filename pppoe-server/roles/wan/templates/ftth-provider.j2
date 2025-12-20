@@ -1,0 +1,17 @@
+require-chap
+login
+netmask 255.255.255.0
+nodefaultroute
+noipdefault
+linkname {{ wan_ppp_interface_name }}
+ifname {{ wan_ppp_interface_name }}
+local
+nocrtscts
+noaccomp
+hide-password
+lcp-echo-interval 20
+lcp-echo-failure 3
+default-asyncmap
+mtu 1492
+ms-dns 9.9.9.9
+ms-dns 149.112.112.112
