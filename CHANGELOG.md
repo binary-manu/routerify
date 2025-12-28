@@ -12,6 +12,19 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.2] - 2025-12-28
+
+### Added
+
+* Support Debian 13.
+* The new `pppoe-server` playbook can be used to provision a
+  Debian-based PPPoE server to test uplink connectivity for the main
+  playbook. Only tested on Debian 13.
+
+### Fixed
+
+* PPP peer files should belong to the `dip` group.
+
 ## [0.3.1] - 2023-09-24
 
 ### Fixed
