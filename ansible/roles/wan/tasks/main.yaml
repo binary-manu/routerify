@@ -29,7 +29,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
-    group: root
+    group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode }}"
   loop:
     - src: ftth-up.sh.j2
