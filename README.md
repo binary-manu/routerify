@@ -8,6 +8,7 @@ router.
 ![Debian 10](https://img.shields.io/badge/Debian-10-green)
 ![Debian 11](https://img.shields.io/badge/Debian-11-green)
 ![Debian 12](https://img.shields.io/badge/Debian-12-green)
+![Debian 13](https://img.shields.io/badge/Debian-13-green)
 
 For LAN connectivity, it can behave as a 2.4Ghz AP, 5GHz AP and wired
 switch at the same time, each element being optional. Each
@@ -40,7 +41,7 @@ equipment, and is illegal in many countries._
 
 At the moment, some of the limitations of the playbook are:
 
-* It can only configure a Debian 10/11/12 system; it _may_ work with
+* It can only configure a Debian 10/11/12/13 system; it _may_ work with
   other Debian versions or derivatives, but this has not been tested;
 * No UI for configuration; tweaks must be applied via the command line
   (e.g., forwarding ports);
@@ -74,7 +75,7 @@ can only be changed by editing the files.
 
 ## How to use
 
-* Install a base Debian 10/11/12 system. There are no particular
+* Install a base Debian 10/11/12/13 system. There are no particular
   constraints, so you can partition the disks as you like, and install
   any additional tools that you want. If you plan to run the playbook on
   the system itself, Ansible must be installed. If a remote controller
@@ -613,6 +614,7 @@ The following VM definitions are available:
 * `debian-10`
 * `debian-11`
 * `debian-12`
+* `debian-13`
 
 Each one uses the specified Debian version as the guest system.
 
@@ -622,6 +624,22 @@ While it is possible to manually edit configuration files to tweak an
 already configured system, it is just easier to update a YAML file with
 variable definitions and re-run the playbook. Ensure to set
 `reconfigure_now` to `yes` so that changes are applied immediately.
+
+## PPPoE server playbook: `pppoe-server`
+
+There is a new helper playbook under `pppoe-server` which can be used to
+provision a Debian-based (only tested on Debian 13) PPPoE server, which
+can then be used to test uplink connectivity from a machine provisioned
+by the main playbook.
+
+This playbook is a trimmed-down version of the main one, and works in
+the same way. For the server and client to communicate, ensure they are
+provisioned with the same CHAP credentials and that the `wan` interfaces
+of both machines are connected to the same bridge.
+
+By default, the server will use IP `100.64.0.1` on the PPP link, and the
+client will get `100.64.0.2` via IPCP. The server can handle just one
+client at the moment.
 
 <!-- Links and resources -->
 [network-diagram]: ./docs/architecture.png
