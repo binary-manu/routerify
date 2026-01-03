@@ -12,6 +12,13 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.3] - 2026-01-03
+
+### Fixed
+
+* Blacklist the conflicting module `rtw88_8822bu` when installing the
+  `88x2bu` driver.
+
 ## [0.3.2] - 2025-12-28
 
 ### Added
