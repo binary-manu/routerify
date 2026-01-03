@@ -1,7 +1,13 @@
 /vagrant/.vagrant/
 /vagrant/ap_spec.rb
 /vagrant/*.yaml
+
 /ansible/hosts.yaml
 /ansible/group_vars/**/*.yaml
-!/ansible/group_vars/00-defaults.yaml
+!/ansible/group_vars/all/00-defaults.yaml
+
+/pppoe-server/hosts.yaml
+/pppoe-server/group_vars/**/*.yaml
+!/pppoe-server/group_vars/all/00-defaults.yaml
+
 *~
