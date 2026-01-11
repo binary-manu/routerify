@@ -3,11 +3,17 @@
   register: _krel
   changed_when: no
 
+- name: Read kernel architecture
+  shell: dpkg --print-architecture
+  register: _karch
+  changed_when: no
+
 - name: Ensure the build system is installed
   apt:
     state: present
     name:
       - linux-headers-{{ _krel.stdout_lines[0] }}
+      - linux-headers-{{ _karch.stdout_lines[0] }}
       - dkms
       - unzip
       - bc
