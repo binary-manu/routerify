@@ -12,6 +12,13 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.4] - 2026-01-11
+
+### Fixed
+
+* Install `linux-headers-$(dpkg --print-architecture)` to ensure that
+  out-of-tree drivers can be rebuilt when the kernel is upgraded.
+
 ## [0.3.3] - 2026-01-03
 
 ### Fixed
