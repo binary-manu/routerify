@@ -39,6 +39,10 @@ COMMIT
 -A PREROUTING -i {{ routing_wan_nic }} -j PORTFWD
 -A POSTROUTING -o {{ routing_wan_nic }} -j MASQUERADE
 
+{% if lan_bridge_dns_intercept_target -%}
+-A PREROUTING -i {{ routing_lan_nic }} ! -s {{ lan_bridge_dns_intercept_target.ip }}/32 -p udp -m udp --dport 53 -j REDIRECT
+{%- endif %}
+
 COMMIT
 
 *mangle

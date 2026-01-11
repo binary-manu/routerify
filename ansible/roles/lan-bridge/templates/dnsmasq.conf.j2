@@ -9,6 +9,11 @@ address=/{{ alias }}/{{ entry.ip }}
 {% endfor -%}
 {% endfor %}
 
+{% if lan_bridge_dns_intercept_target -%}
+strict-order
+server={{ lan_bridge_dns_intercept_target.ip }}#{{ lan_bridge_dns_intercept_target.port | default(53, true) }}
+{%- endif %}
+
 {% for br in lan_bridge_extra_nameservers -%}
 server={{ br }}
 {%- endfor %}
