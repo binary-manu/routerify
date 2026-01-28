@@ -23,6 +23,22 @@
   <<: *register
   notify: "netplan : Apply netplan configuration"
 
+- name: Create drop-in folder
+  file:
+    path: "/etc/systemd/system/hostapd@{{ ap24_interface_name }}.service.d"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Bind the hostapd service to its interface
+  template:
+    src: nic.conf.j2
+    dest: "/etc/systemd/system/hostapd@{{ ap24_interface_name }}.service.d/nic.conf"
+    mode: "0644"
+    owner: root
+    group: root
+
 - name: Enable hostapd@{{ ap24_interface_name }}
   service:
     name: hostapd@{{ ap24_interface_name }}
