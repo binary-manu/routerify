@@ -12,6 +12,25 @@ changes. For example, versions `0.2.x` are not compatible with `0.1.x`.
 
 ## [Unreleased]
 
+## [0.3.5] - 2026-02-04
+
+### Added
+
+* DNS interception: the router can intercept all DNS packets _over UDP_
+  coming from the LAN and redirect them to a target (such as a PiHole
+  instance) that can do any extra processing before returning an answer.
+  This is designed to allow easy integration with a DNS sink.
+
+### Fixed
+
+* Fix an issue that caused `netplan` configuration to be applied too
+  early during provisioning, even when `reconfigure_now` was false. This
+  could cause connectivity loss as the new settings could interfere with
+  the current addressing plan.
+* Bind `hostapd` services for APs to the physical inetrfaces they
+  manage, ensuring they do not try to start and fail if the
+  corresponding radio device is not present.
+
 ## [0.3.4] - 2026-01-11
 
 ### Fixed
