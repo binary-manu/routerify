@@ -443,6 +443,27 @@ The following variables can be used:
         - "web.lan"
         - "printer.lan"
   ```
+* `lan_bridge_dns_intercept_target:`: enables DNS interception. All DNS
+  packets (UDP packets targeting port 53) coming in from the LAN will be
+  grabbed by the router's resolver, even if they are meant for an
+  external DNS server like `8.8.8.8`. They will then be sent to a target
+  system who is responsible for answering the query in place of the
+  original server. This is designed to allow easy integration with DNS
+  sinks like PiHole, even when individual systems are configured to
+  bypass the default DNS list sent via DHCP. The target address, plus an
+  optional port, must be provided:
+
+  ```yaml
+  lan_bridge_dns_intercept_target:
+    ip: 192.168.1.10
+    port: 5353       # defaults to 53 if not specified
+  ```
+
+  As a fallback, if the target fails to send an answer in time, the next
+  available server will be tried, either from `/etc/resolv.conf` or from
+  those specified via `lan_bridge_extra_nameservers`. To avoid loops,
+  DNS packets coming from the target `ip` are exempted from
+  interception, but they must specify an external server.
 
 Currently, it is not possible to disable DHCP; however, hosts can still
 be configured to use static addresses, and the DHCP range can be very
