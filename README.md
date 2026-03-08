@@ -1,3 +1,5 @@
+⚠️ **Migrated to https://codeberg.org/binary-manu/routerify** ⚠️
+
 # Routerify: turns a Linux system into a WiFi router
 
 ## Introduction
